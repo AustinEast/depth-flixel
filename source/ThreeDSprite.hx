@@ -145,7 +145,7 @@ class ThreeDSprite extends FlxNestedSprite {
 		var s = getSlice(z);
 		s.makeGraphic(slice_width, slice_height, color);
 		add(s);
-	}
+    }
 
     function getSlice(z:Int):FlxNestedSprite {
         var s:ThreeDSprite;
