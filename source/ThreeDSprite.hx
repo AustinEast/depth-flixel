@@ -50,10 +50,9 @@ class ThreeDSprite extends FlxNestedSprite {
      */
     override public function postUpdate(elapsed:Float) {
         super.postUpdate(elapsed);
-        for (i in 0...children.length - 1)
-		{
+        for (i in 0...children.length - 1) {
             var child:ThreeDSprite = cast children[i];
-			if (child.active && child.exists) child.z = z + child.z;
+            if (child.active && child.exists) child.z = z + child.z;
         }
     }
 
