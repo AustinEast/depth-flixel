@@ -82,11 +82,11 @@ class PlayState extends FlxState
 		// Drag your mouse to Rotate the camera angle
 		// Scroll the mouse to zoom in-or-out
 		angle += FlxG.mouse.pressed ? FlxG.mouse.x - last_mouse_x : 0.1; 
-        zoom += FlxG.mouse.wheel * 0.1;
+        	zoom += FlxG.mouse.wheel * 0.1;
 		zoom = FlxMath.bound(zoom, 0.5, 3);
-        last_mouse_x = FlxG.mouse.x;
-        FlxG.camera.zoom += (zoom - FlxG.camera.zoom) * lerp;
-        FlxG.camera.angle += (-angle - 90 - FlxG.camera.angle) * lerp;
+        	last_mouse_x = FlxG.mouse.x;
+        	FlxG.camera.zoom += (zoom - FlxG.camera.zoom) * lerp;
+        	FlxG.camera.angle += (-angle - 90 - FlxG.camera.angle) * lerp;
 	}
 
 	/**
