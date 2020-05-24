@@ -18,13 +18,6 @@ class DepthSprite extends FlxSprite {
 	 */
 	public var slices:Array<DepthSprite> = [];
 
-	public var rotation(default, set):Float;
-
-	/**
-	 * The Entity's Rotation relative to the camera.
-	 */
-	public var relative_rotation(get, set):Float;
-
 	/**
 	 * Simulated position of the sprite on the Z axis.
 	 */
@@ -59,14 +52,14 @@ class DepthSprite extends FlxSprite {
 	 */
 	public var count(get, never):Int;
 
-	var _parentRed:Float = 1;
-	var _parentGreen:Float = 1;
-	var _parentBlue:Float = 1;
+	var depth_pos:FlxVector = new FlxVector();
+	var parent_red:Float = 1;
+	var parent_green:Float = 1;
+	var parent_blue:Float = 1;
 
 	public function new(x:Float = 0, y:Float = 0) {
 		super(x, y);
 		z = 0;
-		rotation = 0;
 		velocity_z = 0;
 	}
 
@@ -98,9 +91,9 @@ class DepthSprite extends FlxSprite {
 		slice.scrollFactor.copyFrom(scrollFactor);
 
 		slice.alpha = alpha;
-		slice._parentRed = color.redFloat;
-		slice._parentGreen = color.greenFloat;
-		slice._parentBlue = color.blueFloat;
+		slice.parent_red = color.redFloat;
+		slice.parent_green = color.greenFloat;
+		slice.parent_blue = color.blueFloat;
 		slice.color = slice.color;
 
 		return slice;
@@ -138,7 +131,7 @@ class DepthSprite extends FlxSprite {
 	/**
 	 * Removes all slices sprites from this sprite.
 	 */
-	public function removeAll():Void {
+	public function remove_all():Void {
 		for (slice in slices)
 			remove_slice(slice);
 	}
@@ -166,10 +159,6 @@ class DepthSprite extends FlxSprite {
 				slice.update(elapsed);
 
 		sync();
-
-		// if billboarded, angle is opposite of camera's
-		if (billboard)
-			angle = -FlxG.camera.angle;
 	}
 
 	/**
@@ -194,7 +183,14 @@ class DepthSprite extends FlxSprite {
 	}
 
 	override public function draw():Void {
-		super.draw();
+		// if billboarded, angle is opposite of camera's
+		if (billboard) {
+			var temp = angle;
+			angle = -FlxG.camera.angle;
+			super.draw();
+			angle = temp;
+		} else
+			super.draw();
 
 		for (slice in slices)
 			if (slice.exists && slice.visible)
@@ -274,7 +270,7 @@ class DepthSprite extends FlxSprite {
 
 	/**
 	 * The Entity's depth in relation to the camera angle.
-	 		* Function inspired by @01010111.
+	 * Function inspired by @01010111.
 	 */
 	public function get_depth(?camera:FlxCamera):Float {
 		depth_pos.set(x, y);
@@ -309,6 +305,18 @@ class DepthSprite extends FlxSprite {
 		return s;
 	}
 
+	/**
+	 * Get the Entity's Rotation relative to the Camera.
+	 */
+	public inline function get_relative_angle(?camera:FlxCamera)
+		return ((-angle - (camera == null ? FlxG.camera : camera).angle + 180) % 360);
+
+	/**
+	 * Set the Entity's Rotation relative to the Camera.
+	 */
+	public inline function set_relative_angle(value:Float, ?camera:FlxCamera)
+		return angle = ((value - (camera == null ? FlxG.camera : camera).angle) % 360);
+
 	public inline function anchor_origin():Void {
 		origin.set(frameWidth * 0.5, frameHeight);
 	}
@@ -317,21 +325,7 @@ class DepthSprite extends FlxSprite {
 		offset.set(frameWidth * 0.5, frameHeight);
 	}
 
-	inline function get_relative_rotation()
-		return ((-rotation - FlxG.camera.angle + 180) % 360);
-
-	inline function set_relative_rotation(value:Float)
-		return rotation = ((value - FlxG.camera.angle) % 360);
-
-	var depth_pos:FlxVector = new FlxVector();
-
-	inline function set_billboard(value:Bool):Bool {
-		if (value)
-			anchor_origin();
-		else {
-			centerOrigin();
-			angle = rotation;
-		}
+	function set_billboard(value:Bool):Bool {
 		return billboard = value;
 	}
 
@@ -359,9 +353,9 @@ class DepthSprite extends FlxSprite {
 			return alpha;
 
 		if ((alpha != 1) || (color != 0x00ffffff)) {
-			var red:Float = (color >> 16) * _parentRed / 255;
-			var green:Float = (color >> 8 & 0xff) * _parentGreen / 255;
-			var blue:Float = (color & 0xff) * _parentBlue / 255;
+			var red:Float = (color >> 16) * parent_red / 255;
+			var green:Float = (color >> 8 & 0xff) * parent_green / 255;
+			var blue:Float = (color & 0xff) * parent_blue / 255;
 
 			if (colorTransform == null) {
 				colorTransform = new ColorTransform(red, green, blue, alpha);
@@ -408,12 +402,6 @@ class DepthSprite extends FlxSprite {
 			}
 
 		return Direction;
-	}
-
-	inline function set_rotation(value:Float) {
-		if (!billboard)
-			angle = value;
-		return rotation = value;
 	}
 
 	inline function get_count():Int {
