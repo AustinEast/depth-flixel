@@ -1,8 +1,8 @@
-# Haxeflixel-3D
+# depth-flixel
 
-A sample of a fake 3D implementation in Haxeflixel
+A library aimed at making Stacked Sprites easy with Haxeflixel!
 
-The source has been commented, so hopefully someone finds this useful :)
+more info soon..
 
 ![](gif2.gif)
 ![](gif1.gif)
