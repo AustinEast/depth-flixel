@@ -63,6 +63,8 @@ class PlayState extends FlxState {
 
   override public function update(elapsed:Float):Void {
     FlxG.collide(sprites, sprites);
+    
+    // Sort all the Sprites based on their depth in relation to the Camera
     sprites.sort(DepthUtil.sort_by_depth);
 
     super.update(elapsed);
