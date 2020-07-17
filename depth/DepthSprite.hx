@@ -235,7 +235,7 @@ class DepthSprite extends FlxSprite implements IDepth {
    */
   public function get_depth(?camera:FlxCamera):Float {
     var mid:FlxVector = getMidpoint();
-    var d = FlxVelocity.velocityFromAngle(mid.degrees + (camera == null ? FlxG.camera : camera).angle, mid.lengthSquared);
+    var d = FlxVelocity.velocityFromAngle(mid.degrees + (camera == null ? FlxG.camera : camera).angle, mid.length);
     var d_y = d.y;
     mid.put();
     d.put();
