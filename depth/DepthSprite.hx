@@ -305,40 +305,11 @@ class DepthSprite extends FlxSprite implements IDepth {
   }
 
   override function set_alpha(Alpha:Float):Float {
-    Alpha = FlxMath.bound(Alpha, 0, 1);
-    if (Alpha == alpha) return alpha;
-
-    if ((alpha != 1) || (color != 0x00ffffff)) {
-      var red:Float = (color >> 16) * parent_red / 255;
-      var green:Float = (color >> 8 & 0xff) * parent_green / 255;
-      var blue:Float = (color & 0xff) * parent_blue / 255;
-
-      if (colorTransform == null) {
-        colorTransform = new ColorTransform(red, green, blue, alpha);
-      }
-      else {
-        colorTransform.redMultiplier = red;
-        colorTransform.greenMultiplier = green;
-        colorTransform.blueMultiplier = blue;
-        colorTransform.alphaMultiplier = alpha;
-      }
-      useColorTransform = true;
-    }
-    else {
-      if (colorTransform != null) {
-        colorTransform.redMultiplier = 1;
-        colorTransform.greenMultiplier = 1;
-        colorTransform.blueMultiplier = 1;
-        colorTransform.alphaMultiplier = 1;
-      }
-      useColorTransform = false;
-    }
-    dirty = true;
+    super.set_alpha(Alpha);
 
     if (slices != null) {
       for (slice in slices) slice.alpha = alpha;
     }
-
     return alpha;
   }
 
