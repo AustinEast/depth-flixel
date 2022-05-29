@@ -20,19 +20,19 @@ class DepthSprite extends FlxSprite implements IDepth {
   /**
    * Simulated position of the sprite on the Z axis.
    */
-  public var z:Float;
+  public var z:Float = 0.0;
 
-  public var local_x:Float;
+  public var local_x:Float = 0.0;
 
-  public var local_y:Float;
+  public var local_y:Float = 0.0;
   /**
    * Simulated position of the sprite on the Z axis, relative to the sprite's parent
    */
-  public var local_z:Float;
+  public var local_z:Float = 0.0;
 
-  public var local_angle:Float;
+  public var local_angle:Float = 0.0;
 
-  public var velocity_z:Float;
+  public var velocity_z:Float = 0.0;
   /**
    * Used to set whether the Sprite "billboards",
    * or that the Sprite's angle will always remain opposite of the Camera's
